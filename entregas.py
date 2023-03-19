@@ -1,39 +1,40 @@
 from itertools import permutations
 
-file = open('matriz', 'r')
+arquivo = open('matriz', 'r')
 
-n, m = file.readline().split()
-lines = file.read().splitlines()
+n, m = arquivo.readline().split() # pega o arquivo e divide em linhas e colunas n e m
+linhas = arquivo.read().splitlines()
 
-coordinates = {}
-delivery_points = []
+coordenadas = {}
+pontoDeliver = []
 
 for i in range(int(n)):
-    line = lines[i].split()
+    line = linhas[i].split()
     for j in line:
         if j != '0':
-            coordinates[j] = (i, line.index(j))
-            delivery_points.append(j)
+            coordenadas[j] = (i, line.index(j))
+            pontoDeliver.append(j)
 
-delivery_points.remove('R')
-shortest_cost = float('inf')
+pontoDeliver.remove('R')
+custoDoMenorPercurso = float('inf')
 
-for k in list(permutations(delivery_points)):
+for item in list(permutations(pontoDeliver)):
     current_cost = 0
-    c = 0
+    contador = 0
 
-    k = list(k)
-    k.append('R')
-    k.insert(0, 'R')
+    item = list(item)
+    item.append('R')
+    item.insert(0, 'R')
 
-    while c < len(k)-1:
-        y_cost = abs(coordinates[k[c]][0] - coordinates[k[c+1]][0])
-        x_cost = abs(coordinates[k[c]][1] - coordinates[k[c+1]][1])
+    while contador < len(item)-1:
+        y_cost = abs(coordenadas[item[contador]][0] - coordenadas[item[contador + 1]][0])
+        x_cost = abs(coordenadas[item[contador]][1] - coordenadas[item[contador + 1]][1])
         current_cost += x_cost + y_cost
-        c += 1
+        contador += 1
 
-    if current_cost < shortest_cost:
-        shortest_cost = current_cost
-        route = k
+ #calcular a rotar
+    if current_cost < custoDoMenorPercurso:
+        custoDoMenorPercurso = current_cost
+        route = item
 
 print(' '.join(route[1:-1]))
